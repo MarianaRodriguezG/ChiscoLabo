@@ -1,0 +1,50 @@
+/* General */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+  }
+  
+  /* Contenedor principal */
+  main.container {
+    max-width: 1000px;
+  }
+  
+  /* Formulario */
+  form label {
+    font-weight: 500;
+  }
+  
+  form input {
+    border-radius: 8px;
+  }
+  
+  /* Botones */
+  button.btn {
+    border-radius: 6px;
+  }
+  
+  /* Tabla */
+  table thead th {
+    text-align: center;
+  }
+  
+  table tbody td {
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  /* Encabezados */
+  h1, h2, h3, h4 {
+    font-weight: 600;
+  }
+  
+  /* Acciones en tabla */
+  table td .btn {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  /* Estilo para filas inactivas */
+.table-danger td {
+    opacity: 0.7;
+  }
+  
