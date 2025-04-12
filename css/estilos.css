@@ -6,6 +6,7 @@ body {
   
   /* Contenedor principal */
   main.container {
+    width: 35%;
     max-width: 1000px;
   }
   
@@ -47,4 +48,17 @@ body {
 .table-danger td {
     opacity: 0.7;
   }
-  
+  /* Estilos para logout */
+.logout-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+  text-align: center;
+}
+.login-contenedor {
+  max-width: 200px;
+}
+

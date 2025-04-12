@@ -1,29 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard Admin</title>
-  <link rel="stylesheet" href="../../../css/estilos.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Administrativo</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/estilos.css">
 </head>
-<body class="bg-light">
+<body>
 
-  <main class="container mt-5">
-    <h1 class="mb-3">Panel del Administrador</h1>
-    <p>Bienvenido/a, <span id="usuarioCorreo"></span></p>
-    <a href="../../../login.html" class="btn btn-danger mt-3" onclick="cerrarSesion()">Cerrar sesión</a>
-  </main>
+  <div class="d-flex">
 
-  <script type="module">
-    import { protegerVista } from "../../../js/views/auth.js";
-    protegerVista("admin");
+    <!-- Barra lateral -->
+    <nav class="sidebar bg-dark text-white p-3" aria-label="Menú principal">
+      <h1 class="h4 text-white">CHISCOLABO</h1>
+      <ul class="nav flex-column mt-4">
+        <li><a href="dashboard.html" class="nav-link text-white">📊 Dashboard</a></li>
+        <li><a href="usuarios.html" class="nav-link text-white">👥 Usuarios</a></li>
+        <li><a href="personal.html" class="nav-link text-white">🧑‍🔧 Personal</a></li>
+        <li><a href="../../../logout.html" class="nav-link text-danger">🚪 Cerrar sesión</a></li>
+      </ul>
+    </nav>
 
-    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
-    document.getElementById("usuarioCorreo").textContent = usuario.correo;
+    <!-- Contenido principal -->
+    <main class="flex-grow-1 p-4">
+      
+      <header class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3">Bienvenido, <span id="usuarioCorreo"></span></h2>
+        <form role="search">
+          <input type="search" class="form-control w-100" placeholder="Buscar..." aria-label="Buscar">
+        </form>
+      </header>
 
-    window.cerrarSesion = () => {
-      localStorage.removeItem("usuarioActivo");
-    };
-  </script>
+      <!-- Indicadores -->
+      <section aria-label="Indicadores de usuarios" class="mb-4">
+        <div class="row g-4">
+          <div class="col-md-3">
+            <article class="card text-bg-primary">
+              <div class="card-body">
+                <h5 class="card-title">Usuarios</h5>
+                <p class="card-text fs-4" id="contadorUsuarios">0</p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-3">
+            <article class="card text-bg-success">
+              <div class="card-body">
+                <h5 class="card-title">Activos</h5>
+                <p class="card-text fs-4" id="contadorActivos">0</p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-3">
+            <article class="card text-bg-danger">
+              <div class="card-body">
+                <h5 class="card-title">Inactivos</h5>
+                <p class="card-text fs-4" id="contadorInactivos">0</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabla de usuarios -->
+      <section class="card" aria-labelledby="tabla-usuarios">
+        <header class="card-header">
+          <h3 id="tabla-usuarios" class="h5 mb-0">Últimos usuarios</h3>
+        </header>
+        <div class="card-body p-0">
+          <table class="table mb-0 table-striped" id="tablaUsuarios">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Llenado dinámico desde JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="../../../js/controllers/DashboardController.js"></script>
 </body>
 </html>

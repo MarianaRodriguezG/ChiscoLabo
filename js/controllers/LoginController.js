@@ -15,9 +15,9 @@ const LoginController = {
 
       setTimeout(() => {
         if (usuario.rol === "admin") {
-          window.location.href = "./views/admin/dashboard.html";
+          window.location.href = "../js/views/admin/dashboard.html";
         } else {
-          window.location.href = "./views/alumno/dashboard.html";
+          window.location.href = "../js/views/alumno/dashboard.html";
         }
       }, 1000);
     } else {
