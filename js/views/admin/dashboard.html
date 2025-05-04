@@ -8,23 +8,21 @@
   <link rel="stylesheet" href="../../../css/estilos.css">
 </head>
 <body>
-
   <div class="d-flex">
-
     <!-- Barra lateral -->
     <nav class="sidebar bg-dark text-white p-3" aria-label="Menú principal">
       <h1 class="h4 text-white">CHISCOLABO</h1>
       <ul class="nav flex-column mt-4">
         <li><a href="dashboard.html" class="nav-link text-white">📊 Dashboard</a></li>
-        <li><a href="usuarios.html" class="nav-link text-white">👥 Usuarios</a></li>
+        <li><a href="usuarios.html" class="nav-link text-white">👥 Alumnos</a></li>
         <li><a href="personal.html" class="nav-link text-white">🧑‍🔧 Personal</a></li>
+        <li><a href="materias.html" class="nav-link text-white">📚 Materias</a></li>
         <li><a href="../../../logout.html" class="nav-link text-danger">🚪 Cerrar sesión</a></li>
       </ul>
     </nav>
 
     <!-- Contenido principal -->
     <main class="flex-grow-1 p-4">
-      
       <header class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="h3">Bienvenido, <span id="usuarioCorreo"></span></h2>
         <form role="search">
@@ -38,7 +36,7 @@
           <div class="col-md-3">
             <article class="card text-bg-primary">
               <div class="card-body">
-                <h5 class="card-title">Usuarios</h5>
+                <h5 class="card-title">Alumnos</h5>
                 <p class="card-text fs-4" id="contadorUsuarios">0</p>
               </div>
             </article>
@@ -59,13 +57,21 @@
               </div>
             </article>
           </div>
+          <div class="col-md-3">
+            <article class="card text-bg-warning">
+              <div class="card-body">
+                <h5 class="card-title">Materias</h5>
+                <p class="card-text fs-4" id="contadorMaterias">0</p>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
-      <!-- Tabla de usuarios -->
+      <!-- Tabla de alumnos -->
       <section class="card" aria-labelledby="tabla-usuarios">
         <header class="card-header">
-          <h3 id="tabla-usuarios" class="h5 mb-0">Últimos usuarios</h3>
+          <h3 id="tabla-usuarios" class="h5 mb-0">Últimos alumnos</h3>
         </header>
         <div class="card-body p-0">
           <table class="table mb-0 table-striped" id="tablaUsuarios">
@@ -83,18 +89,15 @@
           </table>
         </div>
       </section>
-
     </main>
   </div>
 
   <script type="module">
     import { protegerVista } from "../../../js/auth.js";
     protegerVista("admin");
-
     const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
     document.getElementById("usuarioCorreo").textContent = usuario.correo;
   </script>
-
   <script type="module" src="../../../js/controllers/DashboardController.js"></script>
 </body>
 </html>

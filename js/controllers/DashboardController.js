@@ -1,3 +1,4 @@
+// js/controllers/DashboardController.js
 import { protegerVista } from "../../views/auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-  // Contadores
   const total = usuarios.length;
   const activos = usuarios.filter(u => u.activo !== false).length;
   const inactivos = usuarios.filter(u => u.activo === false).length;
@@ -17,18 +17,26 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("contadorActivos").textContent = activos;
   document.getElementById("contadorInactivos").textContent = inactivos;
 
-  // Tabla de últimos usuarios
+  // Contador de materias
+  const materias = JSON.parse(localStorage.getItem("materias")) || [];
+  document.getElementById("contadorMaterias").textContent = materias.length;
+
+  // Últimos alumnos
   const cuerpoTabla = document.querySelector("#tablaUsuarios tbody");
   cuerpoTabla.innerHTML = "";
 
-  usuarios.slice(-5).reverse().forEach((u, i) => {
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td>${i + 1}</td>
-      <td>${u.correo}</td>
-      <td>${u.rol}</td>
-      <td>${u.activo === false ? 'Inactivo' : 'Activo'}</td>
-    `;
-    cuerpoTabla.appendChild(fila);
-  });
+  usuarios
+    .filter(u => u.rol === "alumno")
+    .slice(-5)
+    .reverse()
+    .forEach((u, i) => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${u.correo}</td>
+        <td>${u.rol}</td>
+        <td>${u.activo === false ? 'Inactivo' : 'Activo'}</td>
+      `;
+      cuerpoTabla.appendChild(fila);
+    });
 });

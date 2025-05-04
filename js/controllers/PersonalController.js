@@ -3,7 +3,6 @@ import { PersonalView } from '../views/PersonalView.js';
 
 const PersonalController = {
   init() {
-    console.log("✅ PersonalController iniciado");
     PersonalView.init(this);
     this.actualizarVista();
   },
@@ -14,38 +13,33 @@ const PersonalController = {
   },
 
   agregarPersonal(datos) {
-    console.log("👤 Agregando personal:", datos); // Agregado
     PersonalModel.add(datos);
     this.actualizarVista();
   },
-  
 
-  editarPersonal(id) {
-    const persona = PersonalModel.getById(id);
+  editarPersonal(correo) {
+    const persona = PersonalModel.getByCorreo(correo);
     if (persona) {
       PersonalView.cargarEnFormulario(persona);
     }
   },
 
-  actualizarPersonal(id, datos) {
-    PersonalModel.update(id, datos);
+  actualizarPersonal(correo, nuevosDatos) {
+    PersonalModel.update(correo, nuevosDatos);
     this.actualizarVista();
   },
 
-  darDeBaja(id) {
-    if (confirm('¿Seguro que deseas dar de baja a esta persona?')) {
-      PersonalModel.delete(id);
+  darDeBaja(correo) {
+    if (confirm('¿Deseas dar de baja a esta persona?')) {
+      PersonalModel.delete(correo);
       this.actualizarVista();
     }
   },
 
-  darDeAlta(id) {
-    PersonalModel.activate(id);
+  darDeAlta(correo) {
+    PersonalModel.activate(correo);
     this.actualizarVista();
   }
 };
 
-// Esperar que el DOM esté listo
-document.addEventListener("DOMContentLoaded", () => {
-  PersonalController.init();
-});
+PersonalController.init();

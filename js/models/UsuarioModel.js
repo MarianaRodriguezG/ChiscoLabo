@@ -1,4 +1,3 @@
-// js/models/UsuarioModel.js
 export const UsuarioModel = {
   STORAGE_KEY: 'usuarios',
 
@@ -12,41 +11,26 @@ export const UsuarioModel = {
 
   add(usuario) {
     const lista = this.getAll();
+
+    // Asignar ID, rol y estado
     usuario.id = Date.now();
+    usuario.rol = 'alumno';
     usuario.activo = true;
-    this.saveAll([...lista, usuario]);
-  },
 
-  findByCorreo(correo) {
-    return this.getAll().find(u => u.correo === correo);
-  },
+    // Asegurar que tenga todos los campos del alumno
+    usuario = {
+      nombres: usuario.nombres || '',
+      apellidoPaterno: usuario.apellidoPaterno || '',
+      apellidoMaterno: usuario.apellidoMaterno || '',
+      numeroControl: usuario.numeroControl || '',
+      correo: usuario.correo,
+      password: usuario.password,
+      rol: usuario.rol,
+      activo: usuario.activo,
+      id: usuario.id
+    };
 
-  validarCredenciales(correo, password) {
-    return this.getAll().find(u => u.correo === correo && u.password === password);
-  },
-
-  getById(id) {
-    return this.getAll().find(u => u.id === id);
-  },
-
-  update(id, datosActualizados) {
-    const lista = this.getAll().map(u =>
-      u.id === id ? { ...u, ...datosActualizados } : u
-    );
-    this.saveAll(lista);
-  },
-
-  updateRol(id, nuevoRol) {
-    const lista = this.getAll().map(u =>
-      u.id === id ? { ...u, rol: nuevoRol } : u
-    );
-    this.saveAll(lista);
-  },
-
-  toggleActivo(id) {
-    const lista = this.getAll().map(u =>
-      u.id === id ? { ...u, activo: !u.activo } : u
-    );
+    lista.push(usuario);
     this.saveAll(lista);
   },
 
@@ -55,6 +39,13 @@ export const UsuarioModel = {
       u.correo === correo ? { ...u, ...nuevosDatos } : u
     );
     this.saveAll(lista);
+  },
+
+  findByCorreo(correo) {
+    return this.getAll().find(u => u.correo === correo);
+  },
+
+  validarCredenciales(correo, password) {
+    return this.getAll().find(u => u.correo === correo && u.password === password);
   }
-  
 };

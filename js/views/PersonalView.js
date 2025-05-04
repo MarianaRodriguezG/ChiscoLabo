@@ -1,102 +1,106 @@
-// js/views/PersonalView.js
-
 export const PersonalView = {
-    form: document.getElementById('formPersonal'),
-    tabla: document.querySelector('#tablaPersonal tbody'),
-    inputs: {
-      nombre: document.getElementById('nombre'),
-      correo: document.getElementById('correo'),
-      puesto: document.getElementById('puesto'),
-      filtro: 'todos',
-    },
-    modoEdicion: false,
-    idEnEdicion: null,
-  
-    init(controller) {
-      this.form.addEventListener('submit', e => {
-        e.preventDefault();
-        const datos = this.obtenerDatosFormulario();
-        if (this.modoEdicion) {
-          controller.actualizarPersonal(this.idEnEdicion, datos);
-          this.salirModoEdicion();
-        } else {
-          controller.agregarPersonal(datos);
-        }
-        this.form.reset();
-      });
-    
-      // Evento de cambio en el filtro
-      document.getElementById('filtroEstado').addEventListener('change', e => {
-        this.filtro = e.target.value;
-        controller.actualizarVista(); // Se vuelve a renderizar con filtro aplicado
-      });
-    },
-    
-  
-    obtenerDatosFormulario() {
-      return {
-        nombre: this.inputs.nombre.value,
-        correo: this.inputs.correo.value,
-        puesto: this.inputs.puesto.value,
-      };
-    },
-  
-    cargarEnFormulario(personal) {
-      this.inputs.nombre.value = personal.nombre;
-      this.inputs.correo.value = personal.correo;
-      this.inputs.puesto.value = personal.puesto;
-      this.modoEdicion = true;
-      this.idEnEdicion = personal.id;
-    },
-  
-    salirModoEdicion() {
-      this.modoEdicion = false;
-      this.idEnEdicion = null;
+  form: document.getElementById('formPersonal'),
+  tabla: document.querySelector('#tablaPersonal tbody'),
+  filtro: document.getElementById('filtroEstado'),
+  inputs: {
+    nombre: document.getElementById('nombre'),
+    correo: document.getElementById('correo'),
+    password: document.getElementById('password'),
+    rol: document.getElementById('rol'),
+  },
+  modoEdicion: false,
+  correoEnEdicion: null,
+
+  init(controller) {
+    this.form.addEventListener('submit', e => {
+      e.preventDefault();
+      const datos = this.obtenerDatosFormulario();
+      if (!datos) return;
+
+      if (this.modoEdicion) {
+        controller.actualizarPersonal(this.correoEnEdicion, datos);
+        this.salirModoEdicion();
+      } else {
+        controller.agregarPersonal(datos);
+      }
       this.form.reset();
-    },
-  
-    renderizarTabla(lista, controller) {
-      this.tabla.innerHTML = '';
-    
-      // Aplicar filtro antes de renderizar
-      const filtrados = lista.filter(item => {
-        if (this.filtro === 'activos') return item.activo;
-        if (this.filtro === 'inactivos') return !item.activo;
-        return true;
-      });
-    
-      filtrados.forEach((item, index) => {
-        const fila = document.createElement('tr');
-        if (!item.activo) fila.classList.add('table-danger');
-    
-        fila.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${item.nombre}</td>
-          <td>${item.correo}</td>
-          <td>${item.puesto}</td>
-          <td>
-            <button class="btn btn-sm btn-warning me-1" data-id="${item.id}" data-action="editar" ${!item.activo ? 'disabled' : ''}>✏️</button>
-            ${item.activo
-              ? `<button class="btn btn-sm btn-danger" data-id="${item.id}" data-action="baja">🗑️</button>`
-              : `<button class="btn btn-sm btn-success" data-id="${item.id}" data-action="alta">✅</button>`
-            }
-          </td>
-        `;
-        this.tabla.appendChild(fila);
-      });
-    
-      this.tabla.querySelectorAll('button').forEach(btn => {
-        const id = Number(btn.dataset.id);
-        const accion = btn.dataset.action;
-    
-        btn.addEventListener('click', () => {
-          if (accion === 'editar') controller.editarPersonal(id);
-          if (accion === 'baja') controller.darDeBaja(id);
-          if (accion === 'alta') controller.darDeAlta(id);
-        });
-      });
+    });
+
+    this.filtro.addEventListener('change', () => {
+      controller.actualizarVista();
+    });
+  },
+
+  obtenerDatosFormulario() {
+    const datos = {
+      nombre: this.inputs.nombre.value.trim(),
+      correo: this.inputs.correo.value.trim(),
+      password: this.inputs.password.value.trim(),
+      rol: this.inputs.rol.value,
+    };
+
+    if (!datos.nombre || !datos.correo || !datos.password || !datos.rol) {
+      alert('Por favor completa todos los campos.');
+      return null;
     }
-    
-    
-  };
-  
+
+    return datos;
+  },
+
+  cargarEnFormulario(personal) {
+    this.inputs.nombre.value = personal.nombre || '';
+    this.inputs.correo.value = personal.correo || '';
+    this.inputs.password.value = personal.password || '';
+    this.inputs.rol.value = personal.rol || '';
+    this.modoEdicion = true;
+    this.correoEnEdicion = personal.correo;
+  },
+
+  salirModoEdicion() {
+    this.modoEdicion = false;
+    this.correoEnEdicion = null;
+    this.form.reset();
+  },
+
+  renderizarTabla(lista, controller) {
+    this.tabla.innerHTML = '';
+
+    const estado = this.filtro.value;
+    const filtrado = lista.filter(p => {
+      if (estado === 'activos') return p.activo !== false;
+      if (estado === 'inactivos') return p.activo === false;
+      return true;
+    });
+
+    filtrado.forEach((p, index) => {
+      const fila = document.createElement('tr');
+      if (!p.activo) fila.classList.add('table-danger');
+
+      fila.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${p.nombre}</td>
+        <td>${p.correo}</td>
+        <td>${p.rol}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-1" data-correo="${p.correo}" data-action="editar">✏️</button>
+          ${p.activo
+            ? `<button class="btn btn-sm btn-danger" data-correo="${p.correo}" data-action="baja">🗑️</button>`
+            : `<button class="btn btn-sm btn-success" data-correo="${p.correo}" data-action="alta">✅</button>`
+          }
+        </td>
+      `;
+
+      this.tabla.appendChild(fila);
+    });
+
+    this.tabla.querySelectorAll('button').forEach(btn => {
+      const correo = btn.dataset.correo;
+      const accion = btn.dataset.action;
+      btn.addEventListener('click', () => {
+        if (accion === 'editar') controller.editarPersonal(correo);
+        if (accion === 'baja') controller.darDeBaja(correo);
+        if (accion === 'alta') controller.darDeAlta(correo);
+      });
+    });
+  }
+};

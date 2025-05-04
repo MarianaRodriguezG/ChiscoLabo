@@ -1,6 +1,5 @@
-// js/controllers/LoginController.js
-
 import { UsuarioModel } from '../models/UsuarioModel.js';
+import { PersonalModel } from '../models/PersonalModel.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
@@ -12,22 +11,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const correo = document.getElementById('loginCorreo').value.trim();
     const password = document.getElementById('loginPassword').value;
 
-    let usuario = UsuarioModel.validarCredenciales(correo, password);
+    // Buscar en ambas fuentes
+    let usuario = UsuarioModel.getAll().find(u => u.correo === correo && u.password === password);
+    let personal = PersonalModel.getAll().find(p => p.correo === correo && p.password === password);
 
-    // Si el usuario existe pero no tiene la propiedad "activo", la asignamos por compatibilidad
-    if (usuario && usuario.activo === undefined) {
-      usuario.activo = true;
-      UsuarioModel.update(usuario.correo, usuario); // Guarda el cambio
-    }
+    // Asignar prioridad: si existe personal, se usa personal
+    const loginUser = personal || usuario;
 
-    if (usuario && usuario.activo) {
-      localStorage.setItem('usuarioActivo', JSON.stringify(usuario));
+    if (loginUser && loginUser.activo !== false) {
+      localStorage.setItem('usuarioActivo', JSON.stringify(loginUser));
 
-      if (usuario.rol === 'admin') {
+      // Redirección según rol
+      if (loginUser.rol === 'admin') {
         window.location.href = './js/views/admin/dashboard.html';
       } else {
         window.location.href = './js/views/alumno/dashboard.html';
       }
+
     } else {
       mostrarMensaje('Correo o contraseña incorrectos, o cuenta inactiva.', 'danger');
     }
