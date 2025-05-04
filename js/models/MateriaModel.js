@@ -1,5 +1,5 @@
 export const MateriaModel = {
-    STORAGE_KEY: "materias",
+    STORAGE_KEY: 'materias',
   
     getAll() {
       return JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || [];
@@ -11,7 +11,7 @@ export const MateriaModel = {
   
     add(materia) {
       const lista = this.getAll();
-      materia.id = Date.now(); // ID único
+      materia.id = Date.now();
       lista.push(materia);
       this.saveAll(lista);
     },
@@ -19,6 +19,10 @@ export const MateriaModel = {
     delete(id) {
       const lista = this.getAll().filter(m => m.id !== id);
       this.saveAll(lista);
+    },
+  
+    findByClave(clave) {
+      return this.getAll().find(m => m.clave === clave);
     }
   };
   

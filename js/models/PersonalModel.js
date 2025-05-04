@@ -33,6 +33,10 @@ export const PersonalModel = {
       this.saveAll(lista);
     },
   
+    getDocentes() {
+      return this.getAll().filter(p => p.rol === 'docente' && p.activo);
+    },
+  
     update(correo, datosActualizados) {
       const lista = this.getAll().map(item =>
         item.correo === correo ? { ...item, ...datosActualizados } : item
