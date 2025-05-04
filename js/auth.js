@@ -1,9 +1,9 @@
 // js/auth.js
-export function protegerVista(rolRequerido, redir = '../../login.html') {
-    const user = JSON.parse(localStorage.getItem('usuarioActivo'));
-    if (!user || user.rol !== rolRequerido) {
-      alert('Acceso denegado');
-      window.location.href = redir;
-    }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const usuario = JSON.parse(localStorage.getItem('usuarioActivo'));
+
+  if (!usuario) {
+    window.location.href = '../../../login.html';
   }
-  
+});

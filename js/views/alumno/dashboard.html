@@ -10,21 +10,25 @@
 <body class="bg-light">
 
   <main class="container mt-5">
-    <h1 class="mb-3">Panel del Usuario</h1>
-    <p>Hola, <span id="usuarioCorreo"></span></p>
+    <header class="mb-4">
+      <h1>Panel del Usuario</h1>
+      <p>Hola, <span id="usuarioCorreo" class="fw-bold"></span></p>
+    </header>
+
+    <!-- Contenido limitado para el alumno -->
+    <section>
+      <p class="text-muted">Aquí solo podrás consultar tus horarios y realizar reservas.</p>
+    </section>
+
     <a href="../../../logout.html" class="btn btn-danger mt-3">Cerrar sesión</a>
   </main>
 
   <script type="module">
-    import { protegerVista } from "../../../js/views/auth.js";
+    import { protegerVista } from "../../../js/auth.js";
     protegerVista("usuario");
 
     const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
     document.getElementById("usuarioCorreo").textContent = usuario.correo;
-
-    window.cerrarSesion = () => {
-      localStorage.removeItem("usuarioActivo");
-    };
   </script>
 </body>
 </html>

@@ -87,6 +87,14 @@
     </main>
   </div>
 
+  <script type="module">
+    import { protegerVista } from "../../../js/auth.js";
+    protegerVista("admin");
+
+    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+    document.getElementById("usuarioCorreo").textContent = usuario.correo;
+  </script>
+
   <script type="module" src="../../../js/controllers/DashboardController.js"></script>
 </body>
 </html>
